@@ -4,6 +4,8 @@ Hands-on projects for learning Terraform and GitHub Actions on Azure, from a fir
 
 Lab environment: MSDN subscription `sub-msdn-jeetan` (€130 credit per month, spending limit on).
 
+This repo is public. Projects 01–04 were first built in a private repo; that history is kept in a private archive.
+
 ## Roadmap
 
 | # | Project | What you learn | Status |
