@@ -1,0 +1,26 @@
+# Terraform working directory (providers, modules)
+.terraform/
+
+# State files contain resource details and sometimes secrets
+*.tfstate
+*.tfstate.*
+
+# Saved plans
+*.tfplan
+tfplan
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Local overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Variable files often hold personal values; commit *.tfvars.example instead
+*.tfvars
+*.tfvars.json
+
+# Commit .terraform.lock.hcl: it pins provider versions for everyone
