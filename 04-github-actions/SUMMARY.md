@@ -16,8 +16,8 @@ No password or key is stored anywhere: not in GitHub, not in Azure.
 | Piece | Where | Value |
 |-------|-------|-------|
 | Robot's account | `rg-tfstate` | `id-github-tflabs` |
-| Guest list line for PRs | on the identity | `github-pull-request` → `repo:Jeetan-Paul@292231152/azure-terraform-labs@1396286466:pull_request` |
-| Guest list line for `main` | on the identity | `github-main` → `repo:Jeetan-Paul@292231152/azure-terraform-labs@1396286466:ref:refs/heads/main` |
+| Guest list line for PRs | on the identity | `github-pull-request` → `repo:Jeetan-Paul@292231152/azure-terraform-labs@1400549836:pull_request` |
+| Guest list line for `main` | on the identity | `github-main` → `repo:Jeetan-Paul@292231152/azure-terraform-labs@1400549836:ref:refs/heads/main` |
 | Role to build things | whole subscription | Contributor (can't hand out permissions) |
 | Role for state files | `tfstate` container | Storage Blob Data Contributor |
 | Repo variables | GitHub repo | `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID` |
@@ -45,7 +45,7 @@ All applies were done by the robot. I never ran `terraform apply` myself.
 
 ## Things to remember
 
-- **New repos use a new badge format.** Repos created after 15 July 2026 put the account and repo ID numbers in the badge (`Jeetan-Paul@292231152/...@1396286466`). Most tutorials show the old format, which would be refused. Check a repo's format with `gh api repos/OWNER/REPO/actions/oidc/customization/sub`.
+- **New repos use a new badge format.** Repos created after 15 July 2026 put the account and repo ID numbers in the badge (`Jeetan-Paul@292231152/...@1400549836`). Most tutorials show the old format, which would be refused. Check a repo's format with `gh api repos/OWNER/REPO/actions/oidc/customization/sub`.
 - **A wrong guest list line is saved without error.** You only find out when the login fails with `AADSTS70021: No matching federated identity record found`. Compare subjects character by character.
 - **Create guest list lines one at a time.** Two at once on the same identity fails with 409 Conflict.
 - **Contributor isn't enough for state files.** State is data plane, so the robot also needs Storage Blob Data Contributor, just like I did in project 02.
@@ -67,4 +67,8 @@ All applies were done by the robot. I never ran `terraform apply` myself.
 ## Still open for later
 
 - PR runs and `main` runs use the same identity with Contributor. In a team, the PR badge would get a separate, read-only identity.
-- No approval step before apply: private repos on GitHub Free don't get environments with required reviewers. Decide on public or GitHub Pro before project 08.
+- No approval step before apply yet. Project 08 adds one; it works now the repo is public.
+
+## Moving to a public repo (1 Oct 2026)
+
+GitHub-made merge commits carried my personal email, so I archived the private repo as `azure-terraform-labs-archive` and started a fresh public repo with one clean commit. The new repo has a new ID (`1400549836`, was `1396286466`), so I updated both guest list lines with `az identity federated-credential update` and set the three repo variables again. Fork PRs need my approval before workflows run (`all_external_contributors`).

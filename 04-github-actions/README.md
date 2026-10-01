@@ -2,7 +2,7 @@
 
 Let GitHub run Terraform for you. When you open a pull request, GitHub runs `terraform plan` and posts the result in the PR. When you merge, GitHub runs `terraform apply`. GitHub logs in to Azure without any password or key stored anywhere.
 
-**Time:** about 2 hours. **Cost:** a few cents for the lab storage account (deleted at the end). Pipeline runs use your GitHub account's free minutes for private repos.
+**Time:** about 2 hours. **Cost:** a few cents for the lab storage account (deleted at the end). Pipeline runs on GitHub's standard runners are free for public repos.
 
 ## The picture (explained simply)
 
@@ -42,10 +42,10 @@ GitHub changed the badge format for repos created after 15 July 2026. Your repo 
 
 | When | Badge text (subject) |
 |------|----------------------|
-| Pull request | `repo:Jeetan-Paul@292231152/azure-terraform-labs@1396286466:pull_request` |
-| Push to `main` (after a merge) | `repo:Jeetan-Paul@292231152/azure-terraform-labs@1396286466:ref:refs/heads/main` |
+| Pull request | `repo:Jeetan-Paul@292231152/azure-terraform-labs@1400549836:pull_request` |
+| Push to `main` (after a merge) | `repo:Jeetan-Paul@292231152/azure-terraform-labs@1400549836:ref:refs/heads/main` |
 
-`292231152` is your GitHub account's ID number, `1396286466` is the repo's. You can check the prefix yourself:
+`292231152` is your GitHub account's ID number, `1400549836` is the repo's. You can check the prefix yourself:
 
 ```powershell
 gh api repos/Jeetan-Paul/azure-terraform-labs/actions/oidc/customization/sub
@@ -102,7 +102,7 @@ $clientId; $principalId; $tenantId; $subId
 ### 4. Write the guest list (two federated credentials)
 
 ```powershell
-$prefix = "repo:Jeetan-Paul@292231152/azure-terraform-labs@1396286466"
+$prefix = "repo:Jeetan-Paul@292231152/azure-terraform-labs@1400549836"
 
 az identity federated-credential create --name github-pull-request `
   --identity-name $id --resource-group $rg `
@@ -257,8 +257,8 @@ With a pipeline, you don't run `destroy` by hand. You remove the code, and the p
 
 ## Good to know for later
 
-- **Same identity for plan and apply.** Anyone who can open a PR in your repo could edit the workflow to run `apply` with the PR badge. In a solo private repo that's only you. In a team you'd give the PR badge a separate identity with read-only roles.
-- **No approval step.** On GitHub Free, private repos don't get environments with required reviewers. Project 08 needs that; decide on public or GitHub Pro before then.
+- **Same identity for plan and apply.** Anyone who can push a branch to this repo could edit the workflow to run `apply` with the PR badge. That's only you. Pull requests from forks get read-only permissions (so no badge), and the repo requires your approval before any external contributor's workflow runs. In a team you'd still give the PR badge a separate identity with read-only roles.
+- **No approval step yet.** Project 08 adds one with environments and required reviewers, which GitHub Free offers for public repos.
 
 ## References
 

@@ -55,8 +55,8 @@ Steps 6–7 can also be done on the website: **Compare & pull request**, then th
 | Item | Value |
 |------|-------|
 | GitHub account | `Jeetan-Paul` |
-| Repo | `Jeetan-Paul/azure-terraform-labs` (private) |
-| Commit email | `github@jeetan.nl` (noreply address on my own domain) |
+| Repo | `Jeetan-Paul/azure-terraform-labs` (public since 1 Oct 2026; the private original is archived as `azure-terraform-labs-archive`) |
+| Commit email | `292231152+Jeetan-Paul@users.noreply.github.com` (GitHub's noreply address) |
 | Git login | through `gh` (`gh auth setup-git`), token in the Windows credential store |
 
-Private repo on GitHub Free: no protected branches, environments or required reviewers. Decide on public or GitHub Pro before project 05.
+**Email lesson:** saves that GitHub makes itself (merges on the website or with `gh pr merge`) use the GitHub account's email, not the one set in Git. With **Keep my email addresses private** on, GitHub uses the noreply address instead, and **GH007** blocks pushes whose author is one of my private account emails.
