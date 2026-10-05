@@ -15,7 +15,7 @@ This repo is public. Projects 01–04 were first built in a private repo; that h
 | 03 | [Git and GitHub](03-git-github/) | Repo, branches, pull requests, `.gitignore` for Terraform | done |
 | 04 | [GitHub Actions with OIDC](04-github-actions/) | Login to Azure without secrets, `plan` on PR, `apply` on merge | done |
 | 05 | [PR checks](05-pr-checks/) | `fmt`, `validate`, TFLint, Checkov, required checks with a ruleset | done |
-| 06 | Modules | Write your own module, call it twice | todo |
+| 06 | [Modules](06-modules/) | Write your own module, call it twice, `for_each` | ready |
 | 07 | Hub-spoke network | VNets, peering, NSGs, Azure Firewall, private endpoints, Private DNS | todo |
 | 08 | Environments | dev/test/prod with separate state and an approval gate for prod | todo |
 | 09 | Import | Bring hand-built resources under Terraform with `import` blocks | todo |

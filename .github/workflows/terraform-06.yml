@@ -1,0 +1,93 @@
+# Project 06: plan on every pull request, apply when the change lands on main.
+name: terraform-06
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "06-modules/**"
+      - ".github/workflows/terraform-06.yml"
+  push:
+    branches: [main]
+    paths:
+      - "06-modules/**"
+      - ".github/workflows/terraform-06.yml"
+
+# What the workflow's GitHub token may do. Anything not listed is "none".
+permissions:
+  contents: read        # check out the code
+  id-token: write       # ask GitHub for the OIDC token that Azure trusts
+  pull-requests: write  # post the plan as a comment on the PR
+
+# Login details for Terraform. Not secrets: they only say *who* to log in as.
+# The actual proof is the OIDC token, which only exists while the job runs.
+env:
+  ARM_USE_OIDC: "true"
+  ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+defaults:
+  run:
+    shell: bash
+    working-directory: 06-modules
+
+jobs:
+  plan:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.4"
+          terraform_wrapper: false
+
+      - name: Check formatting
+        run: terraform fmt -check
+
+      - name: Init
+        run: terraform init -input=false
+
+      - name: Validate
+        run: terraform validate
+
+      - name: Plan
+        run: terraform plan -input=false -no-color | tee plan.txt
+
+      - name: Post plan on the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "### Terraform plan for 06-modules"
+            echo '```'
+            cat plan.txt
+            echo '```'
+          } > comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file comment.md
+
+  apply:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.4"
+          terraform_wrapper: false
+
+      - name: Init
+        run: terraform init -input=false
+
+      - name: Plan
+        run: terraform plan -input=false -no-color -out tfplan
+
+      - name: Apply
+        run: terraform apply -input=false -no-color tfplan
