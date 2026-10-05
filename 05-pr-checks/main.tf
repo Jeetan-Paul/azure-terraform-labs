@@ -47,3 +47,18 @@ resource "azurerm_subnet_network_security_group_association" "workload" {
   subnet_id                 = azurerm_subnet.workload.id
   network_security_group_id = azurerm_network_security_group.workload.id
 }
+
+
+resource "azurerm_network_security_rule" "rdp" {
+  name                        = "allow-rdp"
+  resource_group_name         = azurerm_resource_group.checks.name
+  network_security_group_name = azurerm_network_security_group.workload.name
+  priority                    = 100
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix       = var.admin_ip
+  destination_address_prefix  = "*"
+}
