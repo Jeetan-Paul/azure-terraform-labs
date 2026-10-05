@@ -51,3 +51,17 @@ module "spoke" {
   }
   tags = var.tags
 }
+
+module "spoke2" {
+  source = "./modules/vnet"
+
+  name                = "vnet-${var.prefix}-spoke2"
+  resource_group_name = azurerm_resource_group.network.name
+  location            = azurerm_resource_group.network.location
+  address_space       = ["10.62.0.0/16"]
+  subnets = {
+    "snet-app" = "10.62.1.0/24"
+  }
+  tags = var.tags
+}
+
