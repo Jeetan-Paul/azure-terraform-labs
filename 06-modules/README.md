@@ -203,6 +203,8 @@ Copy the whole `module "spoke"` block, rename it to `module "spoke2"`, and give 
 
 (Network address ranges must not overlap if you ever want to connect the networks. That's why every network here has its own `10.6x.0.0/16`.)
 
+**What happened when I did this (5 Oct 2026):** the apply failed with `a resource with the ID ".../networkSecurityGroups/nsg-snet-app" already exists`. The module named NSGs only after the subnet (`nsg-${each.key}`). Two subnets called `snet-app` in different networks are fine, because a subnet lives *inside* its network. But NSGs live directly in the resource group, so the second `nsg-snet-app` clashed with the first. The fix was one line in the module: `name = "nsg-${var.name}-${each.key}"`. Because it changed the module, the plan replaced every existing NSG and its subnet link (`10 to add, 8 to destroy`, all marked `# forces replacement` on `name`). Harmless here (empty NSGs, no servers), but in real life a subnet would briefly have no NSG. **Lesson: names a module creates must be unique wherever that resource type lives, and changing them later affects every caller.**
+
 ### 6. Clean up, the IaC way
 
 Same as project 04: remove the code, and the pipeline removes the resources.
@@ -213,6 +215,7 @@ Same as project 04: remove the code, and the pipeline removes the resources.
 4. Delete `variables.tf` too. Without the resource group and the modules, `prefix`, `location` and `tags` are unused, and TFLint (a required check) would block the PR, just like the leftovers it found in project 04.
 5. `terraform fmt -recursive`, `git diff`, commit, push, PR.
 6. **Read the plan:** everything you made should say `will be destroyed`. That's 15 (or 19 with `spoke2`). Check that number before you merge.
+   (`terraform fmt -recursive` and the checks run on the whole repo, so the module folder must stay valid even with nothing calling it.)
 7. Merge. Afterwards: `az group list --query "[].name" -o tsv` should no longer show `rg-tflab-06`.
 
 The module folder `modules/vnet/` stays in the repo. You'll reuse it in project 07.
