@@ -59,6 +59,6 @@ resource "azurerm_network_security_rule" "rdp" {
   protocol                    = "Tcp"
   source_port_range           = "*"
   destination_port_range      = "3389"
-  source_address_prefix       = "*"
+  source_address_prefix       = var.admin_ip
   destination_address_prefix  = "*"
 }
