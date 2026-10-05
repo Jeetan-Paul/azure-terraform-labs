@@ -47,6 +47,7 @@ module "spoke" {
   subnets = {
     "snet-app"  = "10.61.1.0/24"
     "snet-data" = "10.61.2.0/24"
+    "snet-web"  = "10.61.3.0/24"
   }
   tags = var.tags
 }
