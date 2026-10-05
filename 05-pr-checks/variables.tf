@@ -20,3 +20,10 @@ variable "tags" {
     owner      = "jeetan"
   }
 }
+
+variable "admin_ip" {
+  description = "My public IP address, for remote access."
+  type = string
+  default     = "203.0.113.10/32"
+}
+
