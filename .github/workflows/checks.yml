@@ -1,0 +1,75 @@
+# Project 05: quality and security checks on every pull request to main.
+# No "paths:" filter on purpose: a required check whose workflow is skipped
+# stays "Pending" forever, and the pull request can't be merged.
+name: checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  fmt-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.4"
+          terraform_wrapper: false
+
+      - name: Check formatting in all folders
+        run: terraform fmt -check -recursive -diff
+
+      - name: Validate every Terraform folder
+        run: |
+          for dir in $(find . -name '*.tf' -not -path '*/.terraform/*' -exec dirname {} \; | sort -u); do
+            echo "Validating $dir"
+            terraform -chdir="$dir" init -backend=false -input=false -no-color > /dev/null
+            terraform -chdir="$dir" validate -no-color
+          done
+
+  tflint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Install TFLint
+        uses: terraform-linters/setup-tflint@v6
+        with:
+          tflint_version: v0.64.0
+
+      - name: Install TFLint plugins
+        run: tflint --init --config "$(pwd)/.tflint.hcl"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Run TFLint in all folders
+        run: tflint --recursive --config "$(pwd)/.tflint.hcl" --format compact
+
+  checkov:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Install Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install Checkov
+        run: pip install checkov==3.3.21
+
+      - name: Run Checkov (only findings not in the baseline fail)
+        run: checkov --directory . --framework terraform --baseline .checkov.baseline --compact
