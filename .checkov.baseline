@@ -1,0 +1,44 @@
+{
+    "failed_checks": [
+        {
+            "file": "/01-first-deployment/main.tf",
+            "findings": [
+                {
+                    "resource": "azurerm_storage_account.lab",
+                    "check_ids": [
+                        "CKV2_AZURE_1",
+                        "CKV2_AZURE_33",
+                        "CKV2_AZURE_38",
+                        "CKV2_AZURE_40",
+                        "CKV2_AZURE_41",
+                        "CKV2_AZURE_47",
+                        "CKV_AZURE_190",
+                        "CKV_AZURE_206",
+                        "CKV_AZURE_33",
+                        "CKV_AZURE_59"
+                    ]
+                }
+            ]
+        },
+        {
+            "file": "/02-remote-state/main.tf",
+            "findings": [
+                {
+                    "resource": "azurerm_storage_account.lab",
+                    "check_ids": [
+                        "CKV2_AZURE_1",
+                        "CKV2_AZURE_33",
+                        "CKV2_AZURE_38",
+                        "CKV2_AZURE_40",
+                        "CKV2_AZURE_41",
+                        "CKV2_AZURE_47",
+                        "CKV_AZURE_190",
+                        "CKV_AZURE_206",
+                        "CKV_AZURE_33",
+                        "CKV_AZURE_59"
+                    ]
+                }
+            ]
+        }
+    ]
+}

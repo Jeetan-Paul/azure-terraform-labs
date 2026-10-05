@@ -2,11 +2,6 @@ variable "prefix" {
   description = "Short lowercase name used in resource names."
   type        = string
   default     = "tflab"
-
-  validation {
-    condition     = can(regex("^[a-z0-9]{2,10}$", var.prefix))
-    error_message = "prefix must be 2-10 lowercase letters or digits."
-  }
 }
 
 variable "location" {
@@ -20,8 +15,8 @@ variable "tags" {
   type        = map(string)
   default = {
     project    = "azure-terraform-labs"
-    lab        = "04"
+    lab        = "05"
     managed_by = "terraform"
-    owner      = "jeetan-pipeline"
+    owner      = "jeetan"
   }
 }

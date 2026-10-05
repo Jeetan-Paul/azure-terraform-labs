@@ -14,7 +14,7 @@ This repo is public. Projects 01–04 were first built in a private repo; that h
 | 02 | [Remote state](02-remote-state/) | State in an Azure storage account, Entra ID auth, locking, versioning, migrating state | done |
 | 03 | [Git and GitHub](03-git-github/) | Repo, branches, pull requests, `.gitignore` for Terraform | done |
 | 04 | [GitHub Actions with OIDC](04-github-actions/) | Login to Azure without secrets, `plan` on PR, `apply` on merge | done |
-| 05 | PR checks | `fmt`, `validate`, `tflint`, Checkov | todo |
+| 05 | [PR checks](05-pr-checks/) | `fmt`, `validate`, TFLint, Checkov, required checks with a ruleset | ready |
 | 06 | Modules | Write your own module, call it twice | todo |
 | 07 | Hub-spoke network | VNets, peering, NSGs, Azure Firewall, private endpoints, Private DNS | todo |
 | 08 | Environments | dev/test/prod with separate state and an approval gate for prod | todo |
