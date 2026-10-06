@@ -242,8 +242,9 @@ az network watcher show-next-hop -g rg-tflab-07 --vm vm-spoke1 --source-ip 10.71
 - **Effective routes now:** a line `0.0.0.0/0` with source **User** and next hop **VirtualAppliance** at the firewall's IP. The `10.0.0.0/8 → None` line is gone.
 - **Next hop to spoke 2:** `nextHopType` **VirtualAppliance**, and `nextHopIpAddress` = the firewall's private IP. Check it against:
   ```powershell
-  az network firewall show -g rg-tflab-07 -n afw-tflab-hub --query "ipConfigurations[0].privateIPAddress" -o tsv
+  az resource show -g rg-tflab-07 -n afw-tflab-hub --resource-type Microsoft.Network/azureFirewalls --api-version 2026-03-01 --query "properties.ipConfigurations[0].properties.privateIPAddress" -o tsv
   ```
+  (`az network firewall show` would be shorter, but it needs the `azure-firewall` CLI extension and asks to install it. `az resource show` works for any resource type; it needs `--api-version` here because the CLI's default version wasn't supported for firewalls in Sweden Central on 6 Oct 2026. On that day it returned `10.70.0.4`.)
 
 ### 10. The real test: ping from spoke 1 to spoke 2
 
