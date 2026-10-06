@@ -160,7 +160,7 @@ az network nic show-effective-route-table -g rg-tflab-07 -n nic-vm-spoke1 -o tab
 - This only works while the VM is **running**.
 - **What to look for:**
   - `10.71.0.0/16`, next hop **VnetLocal**: its own network.
-  - `10.70.0.0/16`, next hop for the **peering**: the hub. Microsoft's routing docs call this next hop type "Virtual network peering"; the exact spelling in the CLI output isn't in Azure's API specification, so note what it says.
+  - `10.70.0.0/16`, next hop **VNetPeering**: the hub, through the peering. (Microsoft's routing docs call it "Virtual network peering". The spelling `VNetPeering` isn't in Azure's API specification; it was confirmed by running this command on 6 Oct 2026.)
   - **No line for `10.72.0.0/16`** (spoke 2). Spoke 1 has no road there.
   - `10.0.0.0/8`, next hop **None**: Microsoft's docs say Azure adds this route for private address ranges and *drops* the traffic. Spoke 2's address `10.72.1.10` falls inside `10.0.0.0/8`.
 
@@ -175,7 +175,8 @@ az network watcher show-next-hop -g rg-tflab-07 --vm vm-spoke1 --source-ip 10.71
 - `show-next-hop` answers: "if this VM sends a packet from this address to that address, where does it go first?" Nothing is actually sent.
 - **Expect:**
   - To spoke 2 (`10.72.1.10`): `nextHopType` **None**. The packet would be **dropped**.
-  - To the hub (`10.70.1.4`): **not** `None`. The road to the hub works. (Azure's API specification doesn't list a peering value for this command, so write down what it returns; that's a small discovery of your own.)
+  - To the hub (`10.70.1.4`): `nextHopType` **VirtualNetworkPeering**. The road to the hub works. (Not in Azure's API specification either; confirmed by running it on 6 Oct 2026. Note that this command says `VirtualNetworkPeering` while the effective routes table says `VNetPeering`, for the same thing.)
+  - Both answers also say `"routeTableId": "System Route"`: the decision came from Azure's built-in routes, not from a route table you made.
 
 **That's the core lesson of 07a:** both spokes are connected to the hub, but not to each other. Peering is not transitive.
 

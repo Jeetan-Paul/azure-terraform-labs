@@ -76,6 +76,8 @@ resource "azurerm_firewall_policy_rule_collection_group" "hub" {
 resource "azurerm_firewall" "hub" {
   count = var.enable_firewall ? 1 : 0
 
+  #checkov:skip=CKV_AZURE_216:Threat intelligence is set to Deny in the attached firewall policy; this check is for classic-rules firewalls.
+
   name                = "afw-${var.prefix}-hub"
   resource_group_name = azurerm_resource_group.network.name
   location            = azurerm_resource_group.network.location

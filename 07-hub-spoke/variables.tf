@@ -25,7 +25,7 @@ variable "enable_test_vms" {
 variable "enable_firewall" {
   description = "Create Azure Firewall in the hub and route the spokes through it. Costs about EUR 1.10 per hour."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "tags" {
