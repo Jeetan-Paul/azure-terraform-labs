@@ -16,7 +16,7 @@ This repo is public. Projects 01–04 were first built in a private repo; that h
 | 04 | [GitHub Actions with OIDC](04-github-actions/) | Login to Azure without secrets, `plan` on PR, `apply` on merge | done |
 | 05 | [PR checks](05-pr-checks/) | `fmt`, `validate`, TFLint, Checkov, required checks with a ruleset | done |
 | 06 | [Modules](06-modules/) | Write your own module, call it twice, `for_each` | done |
-| 07 | Hub-spoke network | VNets, peering, NSGs, Azure Firewall, private endpoints, Private DNS | todo |
+| 07 | [Hub-spoke network](07-hub-spoke/) | Peering, why it isn't transitive, Azure Firewall, route tables, test VMs, `count` | ready |
 | 08 | Environments | dev/test/prod with separate state and an approval gate for prod | todo |
 | 09 | Import | Bring hand-built resources under Terraform with `import` blocks | todo |
 | 10 | Verified modules and tests | Azure Verified Modules, `terraform test` | todo |
