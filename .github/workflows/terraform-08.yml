@@ -1,0 +1,125 @@
+# Project 08: one codebase, three environments.
+# Pull request: plan for dev, test and prod side by side.
+# Merge to main: apply dev, then test, then prod. Prod waits for approval.
+name: terraform-08
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "08-environments/**"
+      - "06-modules/modules/**"
+      - ".github/workflows/terraform-08.yml"
+  push:
+    branches: [main]
+    paths:
+      - "08-environments/**"
+      - "06-modules/modules/**"
+      - ".github/workflows/terraform-08.yml"
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write
+
+env:
+  ARM_USE_OIDC: "true"
+  ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+  ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+defaults:
+  run:
+    shell: bash
+    working-directory: 08-environments
+
+jobs:
+  # One plan per environment, in parallel. No `environment:` here, so the
+  # OIDC badge says "pull_request" and no approval is needed to look.
+  plan:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        tf_env: [dev, test, prod]
+    env:
+      TF_ENV: ${{ matrix.tf_env }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.4"
+          terraform_wrapper: false
+
+      - name: Init (state for this environment)
+        run: terraform init -input=false -backend-config="key=08-environments-$TF_ENV.tfstate"
+
+      - name: Plan
+        run: terraform plan -input=false -no-color -var-file="envs/$TF_ENV.tfvars" | tee plan.txt
+
+      - name: Post plan on the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "### Terraform plan for 08-environments: $TF_ENV"
+            echo '```'
+            cat plan.txt
+            echo '```'
+          } > comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file comment.md
+
+  # Apply, one environment after the other. `environment:` makes each job
+  # wait for that environment's protection rules (prod: your approval), and
+  # changes the OIDC badge to "environment:<name>".
+  apply-dev:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      TF_ENV: dev
+    steps:
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.4"
+          terraform_wrapper: false
+      - run: terraform init -input=false -backend-config="key=08-environments-$TF_ENV.tfstate"
+      - run: terraform plan -input=false -no-color -var-file="envs/$TF_ENV.tfvars" -out tfplan
+      - run: terraform apply -input=false -no-color tfplan
+
+  apply-test:
+    needs: apply-dev
+    runs-on: ubuntu-latest
+    environment: test
+    env:
+      TF_ENV: test
+    steps:
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.4"
+          terraform_wrapper: false
+      - run: terraform init -input=false -backend-config="key=08-environments-$TF_ENV.tfstate"
+      - run: terraform plan -input=false -no-color -var-file="envs/$TF_ENV.tfvars" -out tfplan
+      - run: terraform apply -input=false -no-color tfplan
+
+  apply-prod:
+    needs: apply-test
+    runs-on: ubuntu-latest
+    environment: prod
+    env:
+      TF_ENV: prod
+    steps:
+      - uses: actions/checkout@v7
+      - uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.4"
+          terraform_wrapper: false
+      - run: terraform init -input=false -backend-config="key=08-environments-$TF_ENV.tfstate"
+      - run: terraform plan -input=false -no-color -var-file="envs/$TF_ENV.tfvars" -out tfplan
+      - run: terraform apply -input=false -no-color tfplan
