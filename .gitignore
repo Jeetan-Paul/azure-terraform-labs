@@ -23,4 +23,8 @@ override.tf.json
 *.tfvars
 *.tfvars.json
 
+# Exception: project 08's per-environment settings. Address ranges only, no secrets,
+# and the pipeline needs them.
+!08-environments/envs/*.tfvars
+
 # Commit .terraform.lock.hcl: it pins provider versions for everyone
