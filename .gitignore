@@ -27,4 +27,8 @@ override.tf.json
 # and the pipeline needs them.
 !08-environments/envs/*.tfvars
 
+# Project 09: the draft from `terraform plan -generate-config-out`. It contains the
+# subscription ID and every attribute; the tidy version goes in network.tf instead.
+09-import/generated.tf
+
 # Commit .terraform.lock.hcl: it pins provider versions for everyone
