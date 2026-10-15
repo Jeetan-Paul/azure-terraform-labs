@@ -18,7 +18,7 @@ This repo is public. Projects 01–04 were first built in a private repo; that h
 | 06 | [Modules](06-modules/) | Write your own module, call it twice, `for_each` | done |
 | 07 | [Hub-spoke network](07-hub-spoke/) | Peering, why it isn't transitive, Azure Firewall, route tables, test VMs, `count` | done |
 | 08 | [Environments](08-environments/) | dev/test/prod from one codebase, separate state, approval gate for prod | done |
-| 09 | [Import](09-import/) | Bring hand-built resources under Terraform with `import` blocks, generated config, drift | ready |
+| 09 | [Import](09-import/) | Bring hand-built resources under Terraform with `import` blocks, generated config, drift | done |
 | 10 | Verified modules and tests | Azure Verified Modules, `terraform test` | todo |
 | 11 | Real workload | AVD host pool or Container Apps with monitoring, deployed by pipeline | todo |
 
