@@ -1,8 +1,17 @@
+locals {
+  tags = {
+    project    = "azure-terraform-labs"
+    lab        = "09"
+    managed_by = "terraform"
+    owner      = "jeetan"
+  }
+}
+
 resource "azurerm_resource_group" "lab" {
   location   = "westeurope"
   managed_by = null
   name       = "rg-tflab-09"
-  tags       = {}
+  tags       = local.tags
 }
 
 resource "azurerm_virtual_network" "lab" {
@@ -10,6 +19,7 @@ resource "azurerm_virtual_network" "lab" {
   name                = "vnet-tflab-09"
   resource_group_name = azurerm_resource_group.lab.name
   address_space       = ["10.90.0.0/16"]
+  tags                = local.tags
 }
 
 resource "azurerm_subnet" "app" {
@@ -24,6 +34,7 @@ resource "azurerm_network_security_group" "app" {
   location            = azurerm_resource_group.lab.location
   name                = "nsg-tflab-09-app"
   resource_group_name = azurerm_resource_group.lab.name
+  tags                = local.tags
 
   security_rule {
     access                     = "Allow"
