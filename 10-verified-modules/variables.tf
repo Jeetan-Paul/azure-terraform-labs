@@ -33,7 +33,7 @@ variable "subnets" {
 variable "allowed_inbound_ports" {
   description = "TCP ports that may be reached from the internet."
   type        = list(number)
-  default     = [443,22]
+  default     = [443, 22]
 
   validation {
     condition     = !contains(var.allowed_inbound_ports, 22) && !contains(var.allowed_inbound_ports, 3389)
