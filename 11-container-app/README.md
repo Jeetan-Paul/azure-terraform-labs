@@ -100,8 +100,8 @@ Open the URL yourself. You'll see Microsoft's sample page, titled **Azure Contai
 You can also find the URL from your PC:
 
 ```powershell
-az login --tenant "4017b86f-a08b-45f8-949e-5982125883a1"
-az account set --subscription "sub-msdn-jeetan"
+az login --tenant "<your-tenant-id>"
+az account set --subscription "<your-subscription>"
 az containerapp show -g rg-tflab-11 -n ca-tflab-11-web --query properties.configuration.ingress.fqdn -o tsv
 ```
 

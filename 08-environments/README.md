@@ -51,8 +51,8 @@ That means three new lines on Azure's guest list (step 1). The robot's account a
 ### 1. Add three lines to the guest list
 
 ```powershell
-az login --tenant "4017b86f-a08b-45f8-949e-5982125883a1"
-az account set --subscription "sub-msdn-jeetan"
+az login --tenant "<your-tenant-id>"
+az account set --subscription "<your-subscription>"
 $prefix = "repo:Jeetan-Paul@292231152/azure-terraform-labs@1400549836"
 
 foreach ($e in "dev", "test", "prod") {
