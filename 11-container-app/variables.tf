@@ -13,7 +13,7 @@ variable "location" {
 variable "image" {
   description = "Container image to run. Must listen on port 80."
   type        = string
-  default     = "mcr.microsoft.com/k8se/quickstart:latest"
+  default     = "mcr.microsoft.com/azuredocs/containerapps-helloworld:latest"
 
   validation {
     condition     = startswith(var.image, "mcr.microsoft.com/")
