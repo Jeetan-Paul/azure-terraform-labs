@@ -53,7 +53,7 @@ Open [.github/workflows/terraform-11.yml](../.github/workflows/terraform-11.yml)
 - `terraform output -raw app_url`: reads the URL from the state. `-raw` prints only the text, without quotes.
 - `curl --fail`: exit with an error on any HTTP error, which turns the job red.
 - `--retry 10 --retry-delay 10 --retry-all-errors`: try up to 10 more times, 10 seconds apart. A scaled-to-zero app needs a moment to wake up.
-- `if ! url=$(...)`: after the teardown there's no `app_url` anymore. Then the step says so and stops without failing.
+- `url=$(... || true)` and `if [ -z "$url" ]`: after the teardown there's no `app_url` anymore. Then the step says so and stops without failing. `-z` means "is empty". (The first version checked for an error instead, but with an empty state `terraform output -raw` returns no text **and no error**, so the smoke test went red after the teardown. Fixed in PR #31.)
 
 ### 2. Tests and lock file
 
