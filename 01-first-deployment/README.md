@@ -42,7 +42,7 @@ Run everything from this folder:
 
 ```powershell
 cd E:\Claude\projects\azure-terraform-labs\01-first-deployment
-az account show --query name -o tsv   # should print sub-msdn-jeetan
+az account show --query name -o tsv   # should print the name of your lab subscription
 ```
 
 ### 1. Init

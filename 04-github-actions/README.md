@@ -56,8 +56,8 @@ gh api repos/Jeetan-Paul/azure-terraform-labs/actions/oidc/customization/sub
 ### 1. Log in to Azure
 
 ```powershell
-az login --tenant "4017b86f-a08b-45f8-949e-5982125883a1"
-az account set --subscription "sub-msdn-jeetan"
+az login --tenant "<your-tenant-id>"
+az account set --subscription "<your-subscription>"
 ```
 
 ### 2. Make sure Azure can create managed identities

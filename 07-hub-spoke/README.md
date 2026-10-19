@@ -91,7 +91,7 @@ ssh-keygen -t rsa -b 4096 -f "$env:USERPROFILE\.ssh\tflab07"
 
 - `ssh-keygen` makes a key pair: a **private** key (the secret, like the key to your front door) and a **public** key (like the lock, safe to give to anyone).
 - `-t rsa -b 4096`: the key type and length. The azurerm docs say Azure wants the `ssh-rsa` format.
-- `-f "$env:USERPROFILE\.ssh\tflab07"`: where to save it: `C:\Users\Jeetan\.ssh\tflab07` (private) and `tflab07.pub` (public). That's outside the repo, so the private key can never be committed by accident.
+- `-f "$env:USERPROFILE\.ssh\tflab07"`: where to save it: `C:\Users\<you>\.ssh\tflab07` (private) and `tflab07.pub` (public). That's outside the repo, so the private key can never be committed by accident.
 - It asks for a **passphrase**: press Enter twice for none. We never use the key to log in.
 
 Copy only the public key into the repo:
@@ -143,7 +143,7 @@ gh run watch
 ### 4. Check the roads (peering state)
 
 ```powershell
-az login --tenant "4017b86f-a08b-45f8-949e-5982125883a1"
+az login --tenant "<your-tenant-id>"
 az network vnet peering list -g rg-tflab-07 --vnet-name vnet-tflab-hub --query "[].{name:name, state:peeringState}" -o table
 ```
 

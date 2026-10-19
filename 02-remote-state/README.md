@@ -37,7 +37,7 @@ Open a terminal in this folder and check you're logged in:
 
 ```powershell
 cd E:\Claude\projects\azure-terraform-labs\02-remote-state
-az account show --query name -o tsv   # should print sub-msdn-jeetan
+az account show --query name -o tsv   # should print the name of your lab subscription
 ```
 
 ### 1. Create the state storage (once, with the Azure CLI)

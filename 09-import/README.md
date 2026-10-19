@@ -33,8 +33,8 @@ There's also a command, `terraform import <address> <id>`. It writes to the stat
 Play the colleague who clicked it together. Five commands:
 
 ```powershell
-az login --tenant "4017b86f-a08b-45f8-949e-5982125883a1"
-az account set --subscription "sub-msdn-jeetan"
+az login --tenant "<your-tenant-id>"
+az account set --subscription "<your-subscription>"
 
 az group create -n rg-tflab-09 -l westeurope
 az network vnet create -g rg-tflab-09 -n vnet-tflab-09 --address-prefixes 10.90.0.0/16 `
