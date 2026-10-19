@@ -20,7 +20,7 @@ This repo is public. Projects 01–04 were first built in a private repo; that h
 | 08 | [Environments](08-environments/) | dev/test/prod from one codebase, separate state, approval gate for prod | done |
 | 09 | [Import](09-import/) | Bring hand-built resources under Terraform with `import` blocks, generated config, drift | done |
 | 10 | [Verified modules and tests](10-verified-modules/) | Azure Verified Modules, azapi, `terraform test` with mock providers | done |
-| 11 | Real workload | AVD host pool or Container Apps with monitoring, deployed by pipeline | todo |
+| 11 | [Real workload](11-container-app/) | Container Apps with Log Analytics, smoke test after deploy, shipping a new revision | ready |
 
 Projects 01, 02, 08 and 09 cover a large part of the Terraform Associate exam.
 
