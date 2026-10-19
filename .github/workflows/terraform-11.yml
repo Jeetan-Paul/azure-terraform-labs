@@ -102,10 +102,11 @@ jobs:
       # --retry: a scaled-to-zero app needs a few seconds to wake up.
       - name: Smoke test
         run: |
-          if ! url=$(terraform output -raw app_url 2>/dev/null); then
+          url=$(terraform output -raw app_url 2>/dev/null || true)
+          if [ -z "$url" ]; then
             echo "No app_url output: nothing to test."
             exit 0
-          fi
+          fi    
           echo "Testing $url"
           curl --fail --silent --show-error --retry 10 --retry-delay 10 --retry-all-errors --output /dev/null "$url"
           echo "The app answers."
